@@ -17,9 +17,13 @@ export function Header() {
     { name: "Expenses", href: "/expenses" },
     { name: "Categories", href: "/categories" },
     { name: "AI Insights", href: "/insights" },
+    { name: "Profile Manager", href: "https://myaccount.asgardeo.io/t/expensemanager" },
   ];
 
   const isActive = (href: string) => {
+    if (href.startsWith("http")) {
+      return false;
+    }
     if (href === "/dashboard") {
       return pathname === "/dashboard";
     }
@@ -40,19 +44,24 @@ export function Header() {
 
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
-                  isActive(item.href)
-                    ? "text-indigo-600 dark:text-indigo-400 font-semibold"
-                    : "text-gray-600 dark:text-gray-300"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isExternal = item.href.startsWith("http");
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className={`text-sm font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                    isActive(item.href)
+                      ? "text-indigo-600 dark:text-indigo-400 font-semibold"
+                      : "text-gray-600 dark:text-gray-300"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop Right Side Controls */}
@@ -84,20 +93,25 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-zinc-950 p-4 space-y-3 transition-colors duration-300">
           <nav className="flex flex-col gap-2">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-zinc-900/60 ${
-                  isActive(item.href)
-                    ? "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-semibold"
-                    : "text-gray-600 dark:text-gray-300"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isExternal = item.href.startsWith("http");
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-zinc-900/60 ${
+                    isActive(item.href)
+                      ? "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-semibold"
+                      : "text-gray-600 dark:text-gray-300"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
           <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex flex-col gap-2">
             <Link href="/expenses/add" onClick={() => setMobileMenuOpen(false)} className="w-full">
