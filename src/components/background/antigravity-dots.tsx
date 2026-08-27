@@ -73,10 +73,17 @@ export function AntigravityDots() {
     const draw = () => {
       ctx.clearRect(0, 0, width, height)
 
+      const isDark = document.documentElement.classList.contains("dark")
       const gradient = ctx.createLinearGradient(0, 0, width, height)
-      gradient.addColorStop(0, "#f8fafc")
-      gradient.addColorStop(0.5, "#f5f3ff")
-      gradient.addColorStop(1, "#eff6ff")
+      if (isDark) {
+        gradient.addColorStop(0, "#09090b") // zinc-950
+        gradient.addColorStop(0.5, "#0b0a1a") // dark deep violet
+        gradient.addColorStop(1, "#020617") // slate-950
+      } else {
+        gradient.addColorStop(0, "#f8fafc")
+        gradient.addColorStop(0.5, "#f5f3ff")
+        gradient.addColorStop(1, "#eff6ff")
+      }
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, width, height)
 
@@ -112,7 +119,9 @@ export function AntigravityDots() {
 
         ctx.beginPath()
         ctx.arc(dot.x, dot.y, dot.radius + offset * 0.02, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(99, 102, 241, ${alpha})`
+        ctx.fillStyle = isDark
+          ? `rgba(167, 139, 250, ${alpha})` // violet-400
+          : `rgba(99, 102, 241, ${alpha})` // indigo-500
         ctx.fill()
       }
 
